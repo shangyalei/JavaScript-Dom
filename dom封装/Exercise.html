@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #div1{
+            width: 500px;
+            height:200px;
+            background:darkgrey;
+        }
+    </style>
+</head>
+<body>
+<div id="div1">
+    <p>我是香蕉</p>
+    <p>我会画画</p>
+    <p>我会唱歌</p>
+    <span>所有的我都是</span><span>一样的会</span>
+</div>
+<ul id="parent">
+    <li id="one">111111</li>
+    <li id="two">222222</li>
+    <li id="there">333333</li>
+    <li id="four">444444</li>
+    <li id="five">5555555</li>
+    <li id="six">66666</li>
+    <li id="seven">777777</li>
+    <li id="eight">888888</li>
+</ul>
+
+
+<ol class="olParent">
+    <li class="li0"></li>
+    <li class="li1"></li>
+    <li class="li2"></li>
+    <li class="li3"></li>
+    <li class="li4"></li>
+    <li class="li5"></li>
+    <li class="li6"></li>
+    <li id="last" class="li7 li8 li9 li10"></li>
+</ol>
+
+
+
+<script>
+
+    var ele=document.getElementsByTagName('li');
+
+    function prevSiblings(ele){
+        var ary=[];
+        var prev=ele.previousSibling;
+        while(prev){
+            if(prev.nodeType===1){
+                ary.push(prev);
+            }
+            prev=prev.previousSibling;
+        }
+        return ary.length?ary:null;
+    }
+
+
+    function nextSiblings(ele){
+        var ary=[];
+        var next=ele.nextSibling;
+        while(next){
+            if(next.nodeType===1){
+                ary.push(next);
+            }
+            next=next.nextSibling;
+        }
+        return ary.length?ary:null;
+    }
+
+    function prev(ele){
+        var prevEle=ele.previousSibling;
+        while(prevEle){
+            if(prevEle.nodeType===1){
+                return prevEle;
+            }
+            prevEle=prevEle.previousSibling;
+        }
+        return null;
+    }
+
+    function next(ele){
+        var next=ele.nextSibling;
+        while(next){
+            if(next.nodeType===1){
+                return next;
+            }
+            next=next.nextSibling;
+        }
+        return null;
+    }
+
+    function closet(ele){
+        var prev=ele.previousSibling;
+        var next=ele.nextSibling;
+        var ary=[];
+        while(prev){
+            if(prev.nodeType===1){
+                ary.push(prev);
+                break;
+            }
+            prev=prev.previousSibling;
+        }
+        while(next){
+            if(next.nodeType===1){
+                ary.push(next);
+                break;
+            }
+            next=next.nextSibling;
+        }
+
+        return ary.length?ary:null;
+
+    }
+
+
+    function siblings(ele){
+        var ary=[];
+        var all=ele.parentNode.childNodes;
+        for(var i=0;i<all.length;i++){
+            var cur=all[i];
+            if(cur.nodeType===1&&cur!==ele){
+                ary.push(cur);
+            }
+        }
+
+        return ary.length?ary:null;
+
+    }
+
+    function children(ele){
+        var all=ele.childNodes;
+        var ary=[];
+        for(var i=0;i<all.length;i++){
+            var cur=all[i];
+            if(cur.nodeType===1){
+                ary.push(cur);
+            }
+        }
+        return ary.length?ary:null;
+    }
+
+
+    function child(ele,tagName){
+        var ary=[];
+        var all=ele.childNodes;
+        var i;
+        var cur=null;
+        if(typeof tagName==='undefined'){
+            for(i=0;i<all.length;i++){
+                cur=all[i];
+                if(cur.nodeType===1){
+                    ary.push(cur);
+                }
+            }
+        }
+        if(typeof tagName==='string'){
+            for(i=0;i<all.length;i++){
+                cur=all[i];
+                tagName=tagName.toUpperCase();
+                if(cur.nodeType===1&&cur.tagName===tagName){
+                    ary.push(cur);
+                }
+            }
+        }
+
+        return ary.length?ary:null;
+    }
+
+    function firstChild(ele){
+        var all=ele.childNodes;
+        var ary=[];
+        for(var i=0;i<all.length;i++){
+            var cur=all[i];
+            if(cur.nodeType===1){
+                ary.push(cur);
+            }
+        }
+        return ary.length?ary[0]:null;
+    }
+
+    function lastChild(ele){
+        var ary=[];
+        var all=ele.childNodes;
+        for(var i=0;i<all.length;i++){
+            var cur=all[i];
+            if(cur.nodeType===1){
+                ary.push(cur);
+            }
+        }
+        return ary.length?ary[ary.length-1]:null;
+    }
+
+    function isFirstChild(ele){
+        var prev=ele.previousSibling;
+        var prevEle=null;
+        while(prev){
+            if(prev.nodeType===1){
+                prevEle=prev;
+                break;
+            }
+            prev=prev.previousSibling;
+        }
+
+       if(prevEle){
+            return false;
+       }else{
+           return true;
+       }
+    }
+
+    function isLastChild(ele){
+        var next=ele.nextSibling;
+        var nextEle=null;
+        while(next){
+            if(next.nodeType===1){
+                nextEle=next;
+                break;
+            }
+            next=next.nextSibling;
+        }
+        if(next){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    function getClass(strClass,container){
+        container=container||document;
+        if(container.getElementsByClassName){
+            return container.getElementsByClassName(strClass);
+        }
+        strClass=strClass.replace(/^ +| +$/g,"");
+        var aryClass=strClass.split(/ +/);
+        var all=container.getElementsByTagName("*");
+        var ary=[];
+        for(var i=0;i<aryClass.length;i++){
+            var str=aryClass[i];
+            var reg=new RegExp("(?:^| )"+str+"( |$)");
+            for(var j=0;j<all.length;j++){
+                var cur=all[j];
+                if(reg.test(cur.className)){
+                    ary.push(cur);
+                }
+            }
+        }
+        return ary.length?ary:null;
+    }
+
+
+    function addClass(ele,strClass){
+
+        var reg= new RegExp("(?:^| )"+strClass+"(?: |$)");
+
+        if(!reg.test(ele.className)){
+            ele.className+=" "+strClass;
+        }
+
+    }
+
+    function removeClass(ele,strClass){
+        var reg= new RegExp("(?:^| )"+strClass+"(?: |$)","g");
+        ele.className=ele.className.replace(reg,"");
+
+    }
+
+
+    function hasClass(ele,strClass){
+        var reg=new RegExp("(?:^| )"+strClass+"(?: |$)");
+        return reg.test(ele.className)?true:false;
+    }
+
+
+    function getCss(ele,attr){
+        var val=null,reg=null;
+        if('getComputedStyle' in window){
+            val=window.getComputedStyle(ele,null)[attr];
+        }else{
+            if(attr==='opacity'){
+                val=ele.currentStyle['filter'];
+                reg=/^alpha\(opacity=(\d+(\.\d+)?)\)$/i;
+                val=reg.test(val)?reg.exec(val)[1]/100:1;
+            }else{
+                val=ele.currentStyle[attr];
+            }
+        }
+
+        reg=/^(-?\d+(\.\d+)?)(px|pt|em|rem)$/i;
+        return reg.test(val)?parseFloat(val):Number(val);
+    }
+
+
+    function setCss(ele,attr,value){
+        if(attr==='opacity'){
+            ele['style']['opacity']=value;
+            ele['style']['filter']="alpha(opacity="+value+")";
+        }
+        if(attr==='float'){
+            ele['style']['cssFloat']=value;
+            ele['style']['styleFloat']=value;
+        }
+
+        var reg=/^(width|height|top|bottom|left|right|((margin|padding)|(Top|Left|Right|Bottom)?))$/;
+        if(reg.test(attr)){
+            if(!isNaN(value)){
+                value+="px";
+            }
+        }
+        ele['style'][attr]=value;
+    }
+
+    function setGroupCss(ele,complex){
+        if(complex.toString()!=='[object Object]'){
+            return;
+        }
+        for(var key in complex){
+            if(complex.hasOwnProperty(key)){
+                setCss(ele,key,complex[key]);
+            }
+        }
+    }
+
+
+    function css(ele){
+        if(typeof arguments[1]==='string'){
+           if(typeof arguments[2]!=="undefined"){
+               setCss(ele,arguments[1],arguments[2]);
+               return;
+           }else if(typeof arguments[2]==='undefined'){
+               return getCss(ele,arguments[1]);
+           }
+        }
+        if(arguments[1].toString()==='[object Object]'){
+            setGroupCss(ele,arguments[1]);
+        }
+    }
+
+    function insertBottom(newEle,container){
+        container.appendChild(newEle);
+    }
+
+   /* var p = document.createElement('p');
+    p.innerHTML="我是新创建的元素p";*/
+
+    /*insertBottom(p,ele);
+
+    insertTop(p,ele);
+
+    insertAfter(p,ele);
+*/
+    function insertTop(newEle,container){
+        var all=container.childNodes;
+        var ary=[];
+        for(var i=0;i<all.length;i++){
+            var cur = all[i];
+            if(cur.nodeType===1){
+                ary.push(cur);
+            }
+        }
+        var first=ary[0];
+        if(first){
+            container.insertBefore(newEle,first);
+        }else{
+            container.appendChild(newEle);
+        }
+    }
+
+    function insertBefore(newEle,oldEle){
+        oldEle.parentNode.insertBefore(newEle,oldEle);
+    }
+
+    function insertAfter(newEle,oldEle){
+        var next=oldEle.nextSibling;
+        var nextEle=null;
+        while(next){
+            if(next.nodeType===1){
+                nextEle=next;
+                break;
+            }
+            next=next.nextSibling;
+        }
+        if(nextEle){
+            oldEle.parentNode.insertBefore(newEle,nextEle);
+        }else{
+            oldEle.parentNode.appendChild(newEle);
+        }
+    }
+
+    function doToArray(ele){
+        var ary=[];
+        try{
+            ary=Array.prototype.slice.call(ele,0);
+        }catch(e){
+            ary=[];
+            for(var i=0;i<ele.length;i++){
+                ary.push(ele[i]);
+            }
+        }
+        return ary;
+    }
+
+    var eles=doToArray(ele);
+
+
+
+    function JSONParse(str){
+        return "JSON" in window?JSONParse(str):eval("("+str+")");
+    }
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+</body>
+</html>
